@@ -19,6 +19,7 @@ from scipy.constants import g
 R = 287.0                       # J/kg K (p. 9)
 cpcv = 7/5                      # ratio of specific heats
 
+p0 = 101325.                    # sea-level pressure / Pa
     
 def speed_of_sound(T):
     '''return the speed of sound in air in m/s
@@ -43,6 +44,16 @@ def viscosity(T):
 
     return 1.495e-6 * np.sqrt(T) / (1 + 120 / T)
 
+def density(T, p=p0):
+    '''return the density of air in kg / m**3
+
+    Not a separate listing in 'Theory of Lift' but part of atmosphere.
+
+    '''
+
+    return p / (R * T)
+
+
 
 def atmosphere(y):
     '''return the properties of the atmosphere over a range of altitudes
@@ -58,7 +69,6 @@ def atmosphere(y):
     '''
     
     T0 = 15 + 273.15            # temperature / K
-    p0 = 101325.0               # pressure / Pa
 
     L = 6.5e-3                  # lapse rate / [K / m]
     yt = 11e3                   # tropopause / m
@@ -77,7 +87,7 @@ def atmosphere(y):
     pt = p0 * (Ts / T0) ** (g / L / R)
     p[strat] = pt * np.exp(g / R / Ts * (yt - y[strat]))
     
-    return p, T, p / (R * T), speed_of_sound(T), viscosity(T)
+    return p, T, density(T, p), speed_of_sound(T), viscosity(T)
 
 
 def figure1_7():
@@ -105,4 +115,3 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
 
     figure1_7()
-
