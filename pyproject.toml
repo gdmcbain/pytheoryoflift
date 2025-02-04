@@ -12,3 +12,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pytheoryoflift"]
+
+[dependency-groups]
+examples = [
+    "matplotlib>=3.10.0",
+    "pandas>=2.2.3",
+]
